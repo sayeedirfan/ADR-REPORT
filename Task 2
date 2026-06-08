@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADR Reporting & Documentation – Task 2</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #44337a, #6b46c1);
+      color: white;
+      padding: 36px 24px 28px;
+      text-align: center;
+    }
+    header .tag {
+      display: inline-block;
+      background: #d69e2e;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    header p { font-size: 13px; opacity: 0.8; }
+
+    .container {
+      max-width: 820px;
+      margin: 32px auto;
+      padding: 0 16px 48px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .section-header {
+      background: #6b46c1;
+      color: white;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header .num {
+      background: white;
+      color: #6b46c1;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .section-body { padding: 20px 24px; }
+
+    .field-row {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .field-row.cols-1 { grid-template-columns: 1fr; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #718096;
+      margin-bottom: 5px;
+    }
+    .field .value {
+      background: #f7fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 9px 13px;
+      font-size: 14px;
+      color: #1a202c;
+      font-weight: 500;
+      min-height: 38px;
+    }
+    .field .value.filled {
+      border-color: #9f7aea;
+      background: #faf5ff;
+    }
+    .field .value.alert {
+      border-color: #fc8181;
+      background: #fff5f5;
+      color: #c53030;
+    }
+    .field .value.textarea {
+      min-height: 70px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-red { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; }
+    .badge-yellow { background: #fffff0; color: #b7791f; border: 1px solid #f6e05e; }
+    .badge-green { background: #f0fff4; color: #276749; border: 1px solid #68d391; }
+    .badge-purple { background: #faf5ff; color: #553c9a; border: 1px solid #9f7aea; }
+
+    .outcome-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .outcome-item {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid #e2e8f0;
+      color: #a0aec0;
+    }
+    .outcome-item.selected {
+      border-color: #6b46c1;
+      background: #faf5ff;
+      color: #553c9a;
+    }
+
+    .seriousness-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .serious-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      border: 1.5px solid #e2e8f0;
+      color: #a0aec0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .serious-item.selected {
+      border-color: #e53e3e;
+      background: #fff5f5;
+      color: #c53030;
+    }
+    .serious-item .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      flex-shrink: 0;
+    }
+    .serious-item.selected .dot { background: #e53e3e; }
+
+    .causality-bar {
+      display: flex;
+      gap: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .caus-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #edf2f7;
+      color: #a0aec0;
+    }
+    .caus-item.active {
+      background: #6b46c1;
+      color: white;
+    }
+
+    .conclusion-box {
+      background: linear-gradient(135deg, #44337a, #6b46c1);
+      color: white;
+      border-radius: 10px;
+      padding: 22px 24px;
+      text-align: center;
+    }
+    .conclusion-box h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+    .conclusion-box p { font-size: 13px; opacity: 0.9; line-height: 1.7; }
+
+    .process-steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 20px 0 24px;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 70px;
+    }
+    .step .circle {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #6b46c1;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .step .label { font-size: 11px; font-weight: 600; color: #553c9a; text-align: center; }
+    .step-arrow { align-self: center; color: #c4b5fd; font-size: 20px; padding: 0 4px; margin-top: -18px; }
+
+    footer { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; }
+
+    @media (max-width: 540px) {
+      .field-row.cols-2, .field-row.cols-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Task 2 – ADR Reporting & Documentation</div>
+  <h1>Structured ADR Reporting Form</h1>
+  <p>VirtualWorks Pharmacovigilance Training &nbsp;|&nbsp; Accurate Reporting. Safer Medicines.</p>
+</header>
+
+<div class="container">
+
+  <!-- Reporting Process -->
+  <div style="background:white;border-radius:12px;padding:20px 24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#6b46c1;margin-bottom:14px;">The Reporting Process</div>
+    <div class="process-steps">
+      <div class="step"><div class="circle">🔍</div><div class="label">IDENTIFY</div></div>
+      <div class="step-arrow">›</div>
+      <div class="step"><div class="circle">📝</div><div class="label">DOCUMENT</div></div>
+      <div class="step-arrow">›</div>
+      <div class="step"><div class="circle">📤</div><div class="label">SUBMIT</div></div>
+      <div class="step-arrow">›</div>
+      <div class="step"><div class="circle">📊</div><div class="label">ANALYZE</div></div>
+    </div>
+    <p style="font-size:12.5px;color:#718096;text-align:center;">Your report can make medicines safer for everyone.</p>
+  </div>
+
+  <!-- Section 1: Patient Information -->
+  <div class="form-card">
+    <div class="section-header"><div class="num">1</div> Patient Information</div>
+    <div class="section-body">
+      <div class="field-row cols-3">
+        <div class="field">
+          <label>Patient Initials</label>
+          <div class="value filled">S.K.</div>
+        </div>
+        <div class="field">
+          <label>Age</label>
+          <div class="value filled">45 years</div>
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <div class="value filled">Female</div>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field">
+          <label>Weight</label>
+          <div class="value filled">~58 kg (estimated)</div>
+        </div>
+        <div class="field">
+          <label>Known Allergies</label>
+          <div class="value alert">None reported prior</div>
+        </div>
+        <div class="field">
+          <label>Medical History</label>
+          <div class="value filled">No significant history</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Suspected Medicine -->
+  <div class="form-card">
+    <div class="section-header"><div class="num">2</div> Suspected Medicine</div>
+    <div class="section-body">
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Medicine Name</label>
+          <div class="value filled alert">Amoxicillin</div>
+        </div>
+        <div class="field">
+          <label>Drug Class</label>
+          <div class="value filled">Beta-lactam Antibiotic (Penicillin group)</div>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field">
+          <label>Dose</label>
+          <div class="value filled">500 mg</div>
+        </div>
+        <div class="field">
+          <label>Route</label>
+          <div class="value filled">Oral (PO)</div>
+        </div>
+        <div class="field">
+          <label>Frequency</label>
+          <div class="value filled">3 times daily (TDS)</div>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field">
+          <label>Start Date</label>
+          <div class="value filled">5 days before onset</div>
+        </div>
+        <div class="field">
+          <label>Stop Date</label>
+          <div class="value filled">Day of ADR report</div>
+        </div>
+        <div class="field">
+          <label>Indication</label>
+          <div class="value filled">Bacterial infection (prescribed)</div>
+        </div>
+      </div>
+
+      <div style="margin-top:4px;padding:12px;background:#fffff0;border-radius:8px;border-left:3px solid #d69e2e;">
+        <div style="font-size:11px;font-weight:700;color:#b7791f;margin-bottom:4px;">CONCOMITANT MEDICATION</div>
+        <div style="font-size:13.5px;color:#4a5568;">Paracetamol 500 mg – oral, as needed (PRN) for pain/fever. <strong>Not suspected</strong> as causative agent.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Adverse Reaction -->
+  <div class="form-card">
+    <div class="section-header"><div class="num">3</div> Adverse Reaction Details</div>
+    <div class="section-body">
+      <div class="field-row cols-1">
+        <div class="field">
+          <label>Reaction / Event Description</label>
+          <div class="value filled textarea">Patient developed skin rash (maculopapular eruption) and pruritus (itching) over trunk and extremities, accompanied by nausea and dizziness, after 3–5 days of Amoxicillin therapy. No angioedema or breathing difficulty noted. Symptoms are consistent with Amoxicillin-induced hypersensitivity reaction.</div>
+        </div>
+      </div>
+      <div class="field-row cols-3">
+        <div class="field">
+          <label>Date of Onset</label>
+          <div class="value filled">Day 3–5 of treatment</div>
+        </div>
+        <div class="field">
+          <label>Date of Recovery</label>
+          <div class="value filled">Expected after drug discontinuation</div>
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <div class="value filled">Ongoing at time of report</div>
+        </div>
+      </div>
+
+      <div class="field-row cols-2" style="margin-top:4px;">
+        <div class="field">
+          <label>Outcome</label>
+          <div class="outcome-grid">
+            <div class="outcome-item">Recovered</div>
+            <div class="outcome-item selected">Recovering</div>
+            <div class="outcome-item">Not Recovered</div>
+            <div class="outcome-item">Fatal</div>
+            <div class="outcome-item">Unknown</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Seriousness Criteria</label>
+          <div class="seriousness-grid">
+            <div class="serious-item"><div class="dot"></div>Death</div>
+            <div class="serious-item"><div class="dot"></div>Life-threatening</div>
+            <div class="serious-item"><div class="dot"></div>Hospitalisation</div>
+            <div class="serious-item"><div class="dot"></div>Disability</div>
+            <div class="serious-item selected"><div class="dot"></div>Medically significant</div>
+            <div class="serious-item"><div class="dot"></div>Congenital anomaly</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row cols-2" style="margin-top:4px;">
+        <div class="field">
+          <label>Dechallenge (drug stopped?)</label>
+          <div class="value filled">✔ Yes – Amoxicillin discontinued</div>
+        </div>
+        <div class="field">
+          <label>Rechallenge (drug restarted?)</label>
+          <div class="value filled">✘ No – contraindicated</div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Causality Assessment (WHO-UMC Scale)</label>
+        <div class="causality-bar">
+          <div class="caus-item">Unlikely</div>
+          <div class="caus-item">Conditional</div>
+          <div class="caus-item">Possible</div>
+          <div class="caus-item active">Probable ✔</div>
+          <div class="caus-item">Certain</div>
+        </div>
+        <div style="font-size:12px;color:#718096;margin-top:6px;">Naranjo Score: 5 &nbsp;|&nbsp; WHO-UMC: Probable &nbsp;|&nbsp; Temporal relationship confirmed, known ADR pattern</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Reporter Information -->
+  <div class="form-card">
+    <div class="section-header"><div class="num">4</div> Reporter Information</div>
+    <div class="section-body">
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Reporter Name</label>
+          <div class="value filled">B.Pharm Student (8th Semester)</div>
+        </div>
+        <div class="field">
+          <label>Designation</label>
+          <div class="value filled">Pharmacy Student / Trainee</div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Healthcare Institution</label>
+          <div class="value filled">VirtualWorks Pharmacovigilance Training Program</div>
+        </div>
+        <div class="field">
+          <label>Date of Report</label>
+          <div class="value filled">June 2025</div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Reporting System</label>
+          <div class="value filled">PvPI (India) / Yellow Card equivalent</div>
+        </div>
+        <div class="field">
+          <label>Report Type</label>
+          <div class="value filled">Initial Report (Spontaneous)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Additional Information -->
+  <div class="form-card">
+    <div class="section-header"><div class="num">5</div> Additional Information & Recommendations</div>
+    <div class="section-body">
+      <div class="field-row cols-1">
+        <div class="field">
+          <label>Clinical Notes</label>
+          <div class="value filled textarea">Amoxicillin-induced rash is one of the most common drug hypersensitivity reactions, occurring in 5–10% of patients. The maculopapular rash typically appears 5–10 days after first exposure. Cross-reactivity with other penicillins is expected. Patient should be advised to avoid all beta-lactam antibiotics in future. Antihistamine therapy (Cetirizine 10 mg OD) initiated for symptomatic relief.</div>
+        </div>
+      </div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>Alternative Drug Suggested</label>
+          <div class="value filled">Azithromycin 500 mg OD (non-beta-lactam)</div>
+        </div>
+        <div class="field">
+          <label>Allergy Documentation</label>
+          <div class="value alert">⚠ Penicillin/Amoxicillin ALLERGY flagged in patient record</div>
+        </div>
+      </div>
+      <div class="field-row cols-1">
+        <div class="field">
+          <label>Patient Counselling Points</label>
+          <div class="value filled textarea">1. Avoid Amoxicillin and all penicillin-class antibiotics in future.
+2. Inform all healthcare providers about this allergy.
+3. Carry a medication allergy card at all times.
+4. Seek immediate medical attention if symptoms worsen (throat swelling, difficulty breathing).
+5. Complete antihistamine course as prescribed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="conclusion-box">
+    <h3>✔ ADR Report Successfully Documented</h3>
+    <p>
+      Suspected Drug: <strong>Amoxicillin</strong> &nbsp;|&nbsp;
+      Reaction: <strong>Hypersensitivity (Rash, Pruritus, Nausea, Dizziness)</strong><br/>
+      Causality: <strong>Probable (Naranjo Score 5, WHO-UMC Probable)</strong><br/>
+      Action Taken: Drug discontinued. Allergy documented. Report submitted to pharmacovigilance system.
+    </p>
+  </div>
+
+  <footer style="margin-top:24px;">
+    <p>ADR Reporting & Documentation – Task 2 &nbsp;|&nbsp; VirtualWorks Student Dashboard</p>
+    <p style="margin-top:4px;">Accurate Reporting. Safer Medicines. &nbsp;|&nbsp; B.Pharm 8th Semester</p>
+  </footer>
+
+</div>
+</body>
+</html>
