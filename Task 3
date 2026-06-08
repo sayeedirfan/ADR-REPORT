@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Causality Assessment – Task 3</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; line-height: 1.6; }
+    header { background: linear-gradient(135deg, #1a365d, #2c7a7b); color: white; padding: 36px 24px 28px; text-align: center; }
+    header .tag { display: inline-block; background: #e53e3e; color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+    header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    header p { font-size: 13px; opacity: 0.8; }
+    .container { max-width: 820px; margin: 32px auto; padding: 0 16px 48px; }
+    .card { background: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .card h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #2c7a7b; border-bottom: 2px solid #b2f5ea; padding-bottom: 8px; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { background: #e6fffa; color: #234e52; font-weight: 700; padding: 10px 14px; text-align: left; border: 1px solid #b2f5ea; }
+    td { padding: 10px 14px; border: 1px solid #e2e8f0; vertical-align: top; }
+    tr:nth-child(even) td { background: #f7fafc; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-green { background: #f0fff4; color: #276749; border: 1px solid #68d391; }
+    .badge-yellow { background: #fffff0; color: #b7791f; border: 1px solid #f6e05e; }
+    .badge-red { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; }
+    .badge-teal { background: #e6fffa; color: #234e52; border: 1px solid #81e6d9; }
+
+    .criterion-card { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .criterion-card.pass { border-color: #68d391; background: #f0fff4; }
+    .criterion-card.fail { border-color: #fc8181; background: #fff5f5; }
+    .criterion-card.na { border-color: #e2e8f0; background: #f7fafc; }
+    .crit-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .crit-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+    .pass .crit-num { background: #38a169; color: white; }
+    .fail .crit-num { background: #e53e3e; color: white; }
+    .na .crit-num { background: #a0aec0; color: white; }
+    .crit-title { font-size: 14px; font-weight: 700; color: #1a202c; }
+    .crit-body { font-size: 13px; color: #4a5568; }
+
+    .scale-bar { display: flex; border-radius: 8px; overflow: hidden; margin: 10px 0; }
+    .scale-item { flex: 1; text-align: center; padding: 12px 4px; font-size: 11px; font-weight: 700; }
+    .scale-item.active { background: #2c7a7b; color: white; }
+    .scale-item.inactive { background: #edf2f7; color: #a0aec0; }
+
+    .conclusion { background: linear-gradient(135deg, #1a365d, #2c7a7b); color: white; border-radius: 10px; padding: 22px 24px; text-align: center; }
+    .conclusion h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .conclusion p { font-size: 13px; opacity: 0.9; }
+    footer { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="tag">Task 3 – Causality Assessment</div>
+  <h1>Causality Assessment of Drug Reactions</h1>
+  <p>VirtualWorks Pharmacovigilance Training &nbsp;|&nbsp; Drug → Reaction Analysis</p>
+</header>
+
+<div class="container">
+
+  <!-- Case Summary -->
+  <div class="card">
+    <h2>Case Study Summary</h2>
+    <table>
+      <tr><th>Parameter</th><th>Details</th></tr>
+      <tr><td><strong>Patient</strong></td><td>45-year-old Female</td></tr>
+      <tr><td><strong>Suspected Drug</strong></td><td>Amoxicillin 500 mg TDS (oral) – started 5 days before reaction</td></tr>
+      <tr><td><strong>Adverse Reaction</strong></td><td>Skin rash (maculopapular), pruritus, nausea, dizziness</td></tr>
+      <tr><td><strong>Onset</strong></td><td>3–5 days after starting the drug</td></tr>
+      <tr><td><strong>Outcome</strong></td><td>Recovered after stopping the drug (dechallenge positive)</td></tr>
+      <tr><td><strong>Concomitant Drug</strong></td><td>Paracetamol PRN – not suspected</td></tr>
+    </table>
+  </div>
+
+  <!-- WHO-UMC Criteria -->
+  <div class="card">
+    <h2>WHO-UMC Causality Assessment Criteria</h2>
+
+    <div class="criterion-card pass">
+      <div class="crit-header">
+        <div class="crit-num">01</div>
+        <div class="crit-title">Temporal Relationship ✔</div>
+      </div>
+      <div class="crit-body">The adverse reaction (rash, itching, nausea, dizziness) appeared 3–5 days after Amoxicillin was started. This is a plausible and well-documented time frame for drug-induced hypersensitivity reactions to penicillin-class antibiotics. <strong>Criterion MET.</strong></div>
+    </div>
+
+    <div class="criterion-card pass">
+      <div class="crit-header">
+        <div class="crit-num">02</div>
+        <div class="crit-title">Dechallenge (Drug Stopped) ✔</div>
+      </div>
+      <div class="crit-body">Amoxicillin was discontinued upon identification of the adverse reaction. The patient showed improvement following drug withdrawal. A positive dechallenge strongly supports a causal relationship. <strong>Criterion MET.</strong></div>
+    </div>
+
+    <div class="criterion-card pass">
+      <div class="crit-header">
+        <div class="crit-num">03</div>
+        <div class="crit-title">Alternative Causes Excluded ✔</div>
+      </div>
+      <div class="crit-body">No other medications, viral infections, food allergens, or environmental factors were identified that could explain the rash and associated symptoms. Paracetamol (concomitant drug) is not known to cause this type of hypersensitivity rash. <strong>Criterion MET.</strong></div>
+    </div>
+
+    <div class="criterion-card na">
+      <div class="crit-header">
+        <div class="crit-num">04</div>
+        <div class="crit-title">Rechallenge – Not Applicable</div>
+      </div>
+      <div class="crit-body">Rechallenge (re-administration of Amoxicillin) was not performed and is contraindicated due to the risk of a more severe hypersensitivity reaction (anaphylaxis). Absence of rechallenge data does not weaken the causality assessment in this case.</div>
+    </div>
+  </div>
+
+  <!-- Naranjo Algorithm -->
+  <div class="card">
+    <h2>Naranjo Algorithm – Detailed Scoring</h2>
+    <table>
+      <thead><tr><th>#</th><th>Question</th><th>Yes</th><th>No</th><th>Don't Know</th><th>Score</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Are there previous conclusive reports on this reaction?</td><td>+1</td><td>0</td><td>0</td><td><strong>+1</strong></td></tr>
+        <tr><td>2</td><td>Did the adverse event appear after the suspected drug was given?</td><td>+2</td><td>-1</td><td>0</td><td><strong>+2</strong></td></tr>
+        <tr><td>3</td><td>Did the adverse reaction improve when drug was discontinued?</td><td>+1</td><td>0</td><td>0</td><td><strong>+1</strong></td></tr>
+        <tr><td>4</td><td>Did the adverse reaction reappear on re-administration?</td><td>+2</td><td>-1</td><td>0</td><td><strong>0</strong> (not done)</td></tr>
+        <tr><td>5</td><td>Are there alternative causes that could explain the reaction?</td><td>-1</td><td>+2</td><td>0</td><td><strong>0</strong> (unclear)</td></tr>
+        <tr><td>6</td><td>Did the reaction reappear when placebo was given?</td><td>-1</td><td>+1</td><td>0</td><td><strong>0</strong> (not done)</td></tr>
+        <tr><td>7</td><td>Was the drug detected in blood at toxic concentration?</td><td>+1</td><td>0</td><td>0</td><td><strong>0</strong> (not tested)</td></tr>
+        <tr><td>8</td><td>Was the reaction more severe when dose increased?</td><td>+1</td><td>0</td><td>0</td><td><strong>0</strong> (not assessed)</td></tr>
+        <tr><td>9</td><td>Did the patient have the same reaction to drug before?</td><td>+1</td><td>0</td><td>0</td><td><strong>0</strong> (unknown)</td></tr>
+        <tr><td>10</td><td>Was the adverse event confirmed by objective evidence?</td><td>+1</td><td>0</td><td>0</td><td><strong>+1</strong></td></tr>
+        <tr style="background:#e6fffa;font-weight:700;"><td colspan="5">Total Naranjo Score</td><td>5 → <span class="badge badge-teal">PROBABLE</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#718096;margin-top:8px;">Interpretation: ≥9 Definite | 5–8 <strong>Probable</strong> | 1–4 Possible | ≤0 Doubtful</p>
+  </div>
+
+  <!-- WHO Scale -->
+  <div class="card">
+    <h2>WHO-UMC Causality Classification</h2>
+    <div class="scale-bar">
+      <div class="scale-item inactive">Unclassified</div>
+      <div class="scale-item inactive">Unlikely</div>
+      <div class="scale-item inactive">Conditional</div>
+      <div class="scale-item inactive">Possible</div>
+      <div class="scale-item active">Probable ✔</div>
+      <div class="scale-item inactive">Certain</div>
+    </div>
+    <table style="margin-top:12px;">
+      <thead><tr><th>Category</th><th>Criteria</th><th>This Case</th></tr></thead>
+      <tbody>
+        <tr><td>Certain</td><td>Conclusive evidence; rechallenge positive</td><td><span class="badge badge-yellow">No rechallenge data</span></td></tr>
+        <tr style="background:#e6fffa;"><td><strong>Probable ✔</strong></td><td>Plausible time sequence; dechallenge positive; no alternative cause</td><td><span class="badge badge-green">All criteria met</span></td></tr>
+        <tr><td>Possible</td><td>Reasonable time; alternative cause possible</td><td>Exceeded this level</td></tr>
+        <tr><td>Unlikely</td><td>Doubtful time sequence; other causes more likely</td><td>Not applicable</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="conclusion">
+    <h3>✔ Final Causality Classification: PROBABLE</h3>
+    <p>
+      Amoxicillin is the <strong>probable cause</strong> of the adverse drug reaction (skin rash, pruritus, nausea, dizziness) in this 45-year-old female patient.<br/>
+      Naranjo Score: <strong>5 (Probable)</strong> &nbsp;|&nbsp; WHO-UMC: <strong>Probable</strong><br/>
+      Temporal relationship confirmed. Dechallenge positive. No alternative cause identified.
+    </p>
+  </div>
+
+  <footer style="margin-top:24px;">
+    <p>Causality Assessment of Drug Reactions – Task 3 &nbsp;|&nbsp; VirtualWorks Pharmacovigilance Training</p>
+  </footer>
+</div>
+</body>
+</html>
