@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ICSR – Final Project Task 5</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; line-height: 1.6; }
+    header { background: linear-gradient(135deg, #1a202c, #553c9a); color: white; padding: 36px 24px 28px; text-align: center; }
+    header .tag { display: inline-block; background: #e53e3e; color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 8px; }
+    header .tag2 { display: inline-block; background: #38a169; color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; margin-left: 8px; }
+    header h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    header p { font-size: 13px; opacity: 0.8; }
+    .container { max-width: 860px; margin: 32px auto; padding: 0 16px 48px; }
+
+    .icsr-header-box { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .icsr-id { font-size: 13px; }
+    .icsr-id span { font-size: 20px; font-weight: 800; color: #553c9a; display: block; }
+    .icsr-badge { background: #faf5ff; border: 2px solid #9f7aea; border-radius: 8px; padding: 10px 18px; text-align: center; }
+    .icsr-badge .lbl { font-size: 11px; color: #718096; font-weight: 600; text-transform: uppercase; }
+    .icsr-badge .val { font-size: 15px; font-weight: 800; color: #553c9a; }
+
+    .section { background: white; border-radius: 12px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .sec-head { background: #553c9a; color: white; padding: 12px 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 10px; }
+    .sec-head .n { background: white; color: #553c9a; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+    .sec-body { padding: 20px 24px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #718096; margin-bottom: 4px; }
+    .field .val { background: #faf5ff; border: 1.5px solid #d6bcfa; border-radius: 6px; padding: 9px 13px; font-size: 14px; color: #1a202c; font-weight: 500; min-height: 38px; }
+    .field .val.red { background: #fff5f5; border-color: #fc8181; color: #c53030; }
+    .field .val.green { background: #f0fff4; border-color: #68d391; }
+    .field .val.ta { min-height: 72px; white-space: pre-wrap; line-height: 1.5; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th { background: #faf5ff; color: #553c9a; font-weight: 700; padding: 10px 12px; text-align: left; border: 1px solid #e9d8fd; }
+    td { padding: 10px 12px; border: 1px solid #e2e8f0; vertical-align: top; }
+    tr:nth-child(even) td { background: #faf5ff; }
+
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .b-purple { background: #faf5ff; color: #553c9a; border: 1px solid #9f7aea; }
+    .b-red { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; }
+    .b-green { background: #f0fff4; color: #276749; border: 1px solid #68d391; }
+    .b-yellow { background: #fffff0; color: #b7791f; border: 1px solid #f6e05e; }
+
+    .deliverables { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .deliv-item { border-radius: 8px; padding: 14px 16px; border-left: 4px solid #553c9a; background: #faf5ff; }
+    .deliv-item h3 { font-size: 13px; font-weight: 700; color: #553c9a; margin-bottom: 6px; }
+    .deliv-item p { font-size: 12.5px; color: #4a5568; }
+    .deliv-item.done { border-left-color: #38a169; background: #f0fff4; }
+    .deliv-item.done h3 { color: #276749; }
+
+    .causality-bar { display: flex; border-radius: 8px; overflow: hidden; margin: 8px 0; }
+    .c-item { flex: 1; text-align: center; padding: 11px 4px; font-size: 11px; font-weight: 700; }
+    .c-active { background: #553c9a; color: white; }
+    .c-inactive { background: #edf2f7; color: #a0aec0; }
+
+    .timeline { display: flex; gap: 0; margin: 10px 0; border-radius: 8px; overflow: hidden; font-size: 12px; }
+    .tl-item { flex: 1; padding: 10px 8px; text-align: center; font-weight: 600; }
+
+    .conclusion { background: linear-gradient(135deg, #1a202c, #553c9a); color: white; border-radius: 10px; padding: 28px 24px; text-align: center; }
+    .conclusion h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+    .conclusion .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+    .conclusion .box { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; }
+    .conclusion .box .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; opacity: 0.7; }
+    .conclusion .box .v { font-size: 15px; font-weight: 800; margin-top: 4px; }
+    .conclusion p { font-size: 13px; opacity: 0.9; margin-top: 10px; }
+    footer { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; }
+
+    @media (max-width: 540px) {
+      .grid-2, .grid-3, .deliverables, .conclusion .grid { grid-template-columns: 1fr; }
+      .timeline { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="tag">Final Project</div>
+  <div class="tag2">Task 5</div>
+  <h1>Individual Case Safety Report (ICSR)</h1>
+  <p>Complete Pharmacovigilance Assessment &nbsp;|&nbsp; Drug Safety Associate Role Simulation</p>
+</header>
+
+<div class="container">
+
+  <!-- ICSR Header -->
+  <div class="icsr-header-box">
+    <div class="icsr-id">ICSR Reference Number<span>PV-2025-TASK5-001</span></div>
+    <div class="icsr-badge"><div class="lbl">Report Type</div><div class="val">Spontaneous – Initial</div></div>
+    <div class="icsr-badge"><div class="lbl">Report Date</div><div class="val">June 2025</div></div>
+    <div class="icsr-badge"><div class="lbl">Regulatory System</div><div class="val">PvPI / ICH E2B</div></div>
+  </div>
+
+  <!-- Key Deliverables -->
+  <div class="section">
+    <div class="sec-head"><div class="n">★</div> Key Deliverables Completed</div>
+    <div class="sec-body">
+      <div class="deliverables">
+        <div class="deliv-item done"><h3>✔ 01 – ADR Identification</h3><p>Rash, pruritus, nausea, dizziness identified as ADRs caused by Amoxicillin in a 45-year-old female patient.</p></div>
+        <div class="deliv-item done"><h3>✔ 02 – ICSR Reporting</h3><p>Structured Individual Case Safety Report prepared per ICH E2B guidelines with all mandatory fields completed.</p></div>
+        <div class="deliv-item done"><h3>✔ 03 – Causality Assessment</h3><p>WHO-UMC: Probable. Naranjo Score: 5. Temporal relationship confirmed, dechallenge positive, no alternative cause.</p></div>
+        <div class="deliv-item done"><h3>✔ 04 – Classification</h3><p>Non-Serious, Expected ADR. Labelled in Amoxicillin SmPC. No expedited reporting required for this case.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section A: Patient -->
+  <div class="section">
+    <div class="sec-head"><div class="n">A</div> Patient Information</div>
+    <div class="sec-body">
+      <div class="grid-3">
+        <div class="field"><label>Patient Initials</label><div class="val">S.K.</div></div>
+        <div class="field"><label>Age / DOB</label><div class="val">45 years / ~1980</div></div>
+        <div class="field"><label>Sex</label><div class="val">Female</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Weight</label><div class="val">~58 kg</div></div>
+        <div class="field"><label>Height</label><div class="val">Not documented</div></div>
+        <div class="field"><label>Ethnicity</label><div class="val">Not documented</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Relevant Medical History</label><div class="val">No significant prior history</div></div>
+        <div class="field"><label>Prior Drug Allergies</label><div class="val red">None reported prior to this event</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section B: Suspected Drug -->
+  <div class="section">
+    <div class="sec-head"><div class="n">B</div> Suspected Medicinal Product</div>
+    <div class="sec-body">
+      <div class="grid-2">
+        <div class="field"><label>Drug Name (INN)</label><div class="val red">Amoxicillin (Amoxicillin trihydrate)</div></div>
+        <div class="field"><label>Drug Class / ATC Code</label><div class="val">Beta-lactam antibiotic / J01CA04</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Dose</label><div class="val">500 mg</div></div>
+        <div class="field"><label>Route</label><div class="val">Oral (PO)</div></div>
+        <div class="field"><label>Frequency</label><div class="val">3 times daily (TDS)</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Start Date</label><div class="val">Day 0 (5 days before ADR)</div></div>
+        <div class="field"><label>Stop Date</label><div class="val">Day 5 (at ADR onset)</div></div>
+        <div class="field"><label>Indication</label><div class="val">Bacterial infection (prescribed)</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Action Taken</label><div class="val green">✔ Drug Withdrawn (Dechallenge)</div></div>
+        <div class="field"><label>Batch/Lot Number</label><div class="val">Not documented</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section C: Concomitant -->
+  <div class="section">
+    <div class="sec-head"><div class="n">C</div> Concomitant Medications</div>
+    <div class="sec-body">
+      <table>
+        <thead><tr><th>Drug</th><th>Dose/Route</th><th>Indication</th><th>Start</th><th>Suspected?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Paracetamol (Acetaminophen)</td>
+            <td>500 mg oral PRN</td>
+            <td>Pain / Fever</td>
+            <td>Concurrent</td>
+            <td><span class="badge b-green">No – Not suspected</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section D: Adverse Event -->
+  <div class="section">
+    <div class="sec-head"><div class="n">D</div> Adverse Event / Reaction</div>
+    <div class="sec-body">
+      <div class="grid-2">
+        <div class="field"><label>Reaction Description (MedDRA PT)</label><div class="val red ta">Maculopapular rash (MedDRA: 10025844)
+Pruritus / itching (MedDRA: 10037087)
+Nausea (MedDRA: 10028813)
+Dizziness (MedDRA: 10013573)</div></div>
+        <div class="field"><label>Narrative Summary</label><div class="val ta">45-year-old female developed skin rash, pruritus, nausea and dizziness 3–5 days after initiation of Amoxicillin 500 mg TDS for bacterial infection. Symptoms consistent with drug-induced hypersensitivity reaction. No angioedema or anaphylaxis. Drug discontinued; improvement noted post-dechallenge.</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Date of Onset</label><div class="val">Day 3–5 of treatment</div></div>
+        <div class="field"><label>Date of Resolution</label><div class="val">Post-dechallenge</div></div>
+        <div class="field"><label>Outcome</label><div class="val green">✔ Recovering / Resolved</div></div>
+      </div>
+
+      <div style="margin:14px 0 6px;font-size:11px;font-weight:700;text-transform:uppercase;color:#718096;">Event Timeline</div>
+      <div class="timeline">
+        <div class="tl-item" style="background:#553c9a;color:white;">Day 0<br/>Amoxicillin started</div>
+        <div class="tl-item" style="background:#805ad5;color:white;">Day 1–3<br/>Nausea, Dizziness</div>
+        <div class="tl-item" style="background:#e53e3e;color:white;">Day 3–5<br/>Rash & Pruritus</div>
+        <div class="tl-item" style="background:#dd6b20;color:white;">Day 5<br/>Drug stopped</div>
+        <div class="tl-item" style="background:#38a169;color:white;">Day 6+<br/>Improvement</div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="field"><label>Seriousness</label><div class="val green">Non-Serious – No hospitalisation, no life-threat</div></div>
+        <div class="field"><label>Expectedness</label><div class="val green">Expected – Labelled ADR in Amoxicillin SmPC</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section E: Causality -->
+  <div class="section">
+    <div class="sec-head"><div class="n">E</div> Causality Assessment</div>
+    <div class="sec-body">
+      <table style="margin-bottom:16px;">
+        <thead><tr><th>Method</th><th>Score / Result</th><th>Classification</th></tr></thead>
+        <tbody>
+          <tr><td>Naranjo Algorithm</td><td>Score = 5</td><td><span class="badge b-purple">Probable</span></td></tr>
+          <tr><td>WHO-UMC Scale</td><td>Criteria: Temporal ✔, Dechallenge ✔, No Alt. Cause ✔</td><td><span class="badge b-purple">Probable</span></td></tr>
+          <tr><td>French Imputability</td><td>Chronological score: C3 | Semiological: S2</td><td><span class="badge b-purple">Probable (I3)</span></td></tr>
+        </tbody>
+      </table>
+      <div class="causality-bar">
+        <div class="c-item c-inactive">Unclassified</div>
+        <div class="c-item c-inactive">Unlikely</div>
+        <div class="c-item c-inactive">Conditional</div>
+        <div class="c-item c-inactive">Possible</div>
+        <div class="c-item c-active">Probable ✔</div>
+        <div class="c-item c-inactive">Certain</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section F: Reporter -->
+  <div class="section">
+    <div class="sec-head"><div class="n">F</div> Reporter & Regulatory Information</div>
+    <div class="sec-body">
+      <div class="grid-2">
+        <div class="field"><label>Reporter Name</label><div class="val">B.Pharm Student – 8th Semester</div></div>
+        <div class="field"><label>Reporter Qualification</label><div class="val">Pharmacy student / Healthcare trainee</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Institution</label><div class="val">VirtualWorks Pharmacovigilance Training</div></div>
+        <div class="field"><label>Country</label><div class="val">India</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="field"><label>Reporting System</label><div class="val">PvPI (India) / EudraVigilance</div></div>
+        <div class="field"><label>ICH E2B Compliance</label><div class="val green">✔ Compliant</div></div>
+        <div class="field"><label>Expedited Report Required?</label><div class="val green">No – Non-Serious, Expected</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section G: Recommendations -->
+  <div class="section">
+    <div class="sec-head"><div class="n">G</div> Drug Safety Recommendations</div>
+    <div class="sec-body">
+      <table>
+        <thead><tr><th>Action</th><th>Detail</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Discontinue Amoxicillin</td><td>Immediate withdrawal upon ADR identification</td><td><span class="badge b-green">✔ Done</span></td></tr>
+          <tr><td>Symptomatic Treatment</td><td>Cetirizine 10 mg OD for rash/pruritus; supportive care for nausea</td><td><span class="badge b-green">✔ Initiated</span></td></tr>
+          <tr><td>Alternative Antibiotic</td><td>Switch to Azithromycin 500 mg OD (non-beta-lactam)</td><td><span class="badge b-yellow">Recommended</span></td></tr>
+          <tr><td>Allergy Documentation</td><td>Flag Amoxicillin/Penicillin allergy in patient record</td><td><span class="badge b-green">✔ Done</span></td></tr>
+          <tr><td>Patient Counselling</td><td>Avoid all penicillin-class antibiotics; carry allergy card</td><td><span class="badge b-green">✔ Done</span></td></tr>
+          <tr><td>ADR Reporting</td><td>Submit ICSR to PvPI national pharmacovigilance centre</td><td><span class="badge b-green">✔ Submitted</span></td></tr>
+          <tr><td>Follow-up</td><td>Monitor until complete resolution; check for urticaria progression</td><td><span class="badge b-yellow">Ongoing</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Final Conclusion -->
+  <div class="conclusion">
+    <h3>✔ ICSR Assessment Complete – Final Project Submitted</h3>
+    <div class="grid">
+      <div class="box"><div class="lbl">Suspected Drug</div><div class="v">Amoxicillin</div></div>
+      <div class="box"><div class="lbl">Adverse Reaction</div><div class="v">Hypersensitivity Rash + 3 symptoms</div></div>
+      <div class="box"><div class="lbl">Causality</div><div class="v">Probable (Naranjo 5)</div></div>
+      <div class="box"><div class="lbl">Classification</div><div class="v">Non-Serious | Expected</div></div>
+    </div>
+    <p>
+      As a Drug Safety Associate, a complete pharmacovigilance evaluation has been performed:<br/>
+      ADR identified → ICSR documented (ICH E2B) → Causality assessed (WHO-UMC Probable) →
+      Case classified (Non-Serious, Expected) → Reported to PvPI.<br/><br/>
+      <strong>"Accurate Reporting Today, Safer Patients Tomorrow."</strong>
+    </p>
+  </div>
+
+  <footer style="margin-top:24px;">
+    <p>Individual Case Safety Report (ICSR) – Final Project Task 5 &nbsp;|&nbsp; VirtualWorks Pharmacovigilance Training</p>
+    <p style="margin-top:4px;">B.Pharm 8th Semester &nbsp;|&nbsp; You are the link between a reaction and patient safety.</p>
+  </footer>
+</div>
+</body>
+</html>
