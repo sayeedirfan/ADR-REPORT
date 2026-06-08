@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Case Classification & Severity – Task 4</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; line-height: 1.6; }
+    header { background: linear-gradient(135deg, #744210, #d69e2e); color: white; padding: 36px 24px 28px; text-align: center; }
+    header .tag { display: inline-block; background: #553c9a; color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; }
+    header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+    header p { font-size: 13px; opacity: 0.85; }
+    .container { max-width: 860px; margin: 32px auto; padding: 0 16px 48px; }
+    .card { background: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .card h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #b7791f; border-bottom: 2px solid #fef3c7; padding-bottom: 8px; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th { background: #fef3c7; color: #744210; font-weight: 700; padding: 10px 12px; text-align: left; border: 1px solid #f6e05e; }
+    td { padding: 10px 12px; border: 1px solid #e2e8f0; vertical-align: middle; }
+    tr:nth-child(even) td { background: #fffbeb; }
+
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .serious { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; }
+    .non-serious { background: #f0fff4; color: #276749; border: 1px solid #68d391; }
+    .expected { background: #ebf8ff; color: #2c5282; border: 1px solid #90cdf4; }
+    .unexpected { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; }
+
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .summary-box { border-radius: 10px; padding: 20px; text-align: center; }
+    .summary-box .num { font-size: 40px; font-weight: 900; line-height: 1; }
+    .summary-box .label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 6px; }
+    .box-serious { background: #fff5f5; color: #c53030; border: 2px solid #fc8181; }
+    .box-nonserious { background: #f0fff4; color: #276749; border: 2px solid #68d391; }
+
+    .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .guide-box { border-radius: 8px; padding: 14px 16px; }
+    .guide-box h3 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .guide-box ul { padding-left: 16px; font-size: 13px; }
+    .guide-box li { margin-bottom: 4px; }
+    .guide-serious { background: #fff5f5; border-left: 4px solid #e53e3e; }
+    .guide-serious h3 { color: #c53030; }
+    .guide-expected { background: #ebf8ff; border-left: 4px solid #3182ce; }
+    .guide-expected h3 { color: #2c5282; }
+
+    .case-detail { border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .case-detail.serious-case { border-color: #fc8181; background: #fff5f5; }
+    .case-detail.nonserious-case { border-color: #68d391; background: #f0fff4; }
+    .case-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .case-num { background: #d69e2e; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+    .case-drug { font-size: 15px; font-weight: 800; }
+    .case-body { font-size: 13px; color: #4a5568; line-height: 1.6; }
+
+    .conclusion { background: linear-gradient(135deg, #744210, #d69e2e); color: white; border-radius: 10px; padding: 22px 24px; text-align: center; }
+    .conclusion h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+    .conclusion p { font-size: 13px; opacity: 0.9; line-height: 1.7; }
+    footer { text-align: center; font-size: 12px; color: #a0aec0; margin-top: 24px; }
+
+    @media (max-width: 540px) {
+      .summary-grid, .guide-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="tag">Task 4 – Classification & Severity</div>
+  <h1>Case Classification & Severity Analysis</h1>
+  <p>VirtualWorks Pharmacovigilance Training &nbsp;|&nbsp; Seriousness & Expectedness Evaluation</p>
+</header>
+
+<div class="container">
+
+  <!-- Guidelines -->
+  <div class="card">
+    <h2>Pharmacovigilance Classification Guidelines</h2>
+    <div class="guide-grid">
+      <div class="guide-box guide-serious">
+        <h3>⚠ SERIOUS ADR</h3>
+        <ul>
+          <li>Results in death</li>
+          <li>Life-threatening</li>
+          <li>Requires hospitalisation</li>
+          <li>Causes disability/incapacity</li>
+          <li>Congenital anomaly</li>
+          <li>Other medically important condition</li>
+        </ul>
+      </div>
+      <div class="guide-box guide-expected">
+        <h3>ℹ EXPECTED ADR</h3>
+        <ul>
+          <li>Listed in drug label/SmPC</li>
+          <li>Consistent with known drug profile</li>
+          <li>Documented in product information</li>
+          <li>Known characteristics of the drug class</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="card">
+    <h2>Case Summary Overview</h2>
+    <div class="summary-grid">
+      <div class="summary-box box-serious"><div class="num">3</div><div class="label">Serious Cases</div></div>
+      <div class="summary-box box-nonserious"><div class="num">2</div><div class="label">Non-Serious Cases</div></div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Case</th><th>Drug</th><th>Adverse Reaction</th><th>Seriousness</th><th>Expectedness</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>01</strong></td>
+          <td>Amoxicillin</td>
+          <td>Skin rash, itching</td>
+          <td><span class="badge non-serious">NON-SERIOUS</span></td>
+          <td><span class="badge expected">EXPECTED</span></td>
+        </tr>
+        <tr>
+          <td><strong>02</strong></td>
+          <td>Ibuprofen</td>
+          <td>GI bleeding requiring hospitalisation</td>
+          <td><span class="badge serious">SERIOUS</span></td>
+          <td><span class="badge expected">EXPECTED</span></td>
+        </tr>
+        <tr>
+          <td><strong>03</strong></td>
+          <td>Metformin</td>
+          <td>Lactic acidosis</td>
+          <td><span class="badge serious">SERIOUS</span></td>
+          <td><span class="badge unexpected">UNEXPECTED</span></td>
+        </tr>
+        <tr>
+          <td><strong>04</strong></td>
+          <td>Atorvastatin</td>
+          <td>Elevated liver enzymes (mild)</td>
+          <td><span class="badge non-serious">NON-SERIOUS</span></td>
+          <td><span class="badge expected">EXPECTED</span></td>
+        </tr>
+        <tr>
+          <td><strong>05</strong></td>
+          <td>Levofloxacin</td>
+          <td>Tendon rupture</td>
+          <td><span class="badge serious">SERIOUS</span></td>
+          <td><span class="badge expected">EXPECTED</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Case-by-Case Analysis -->
+  <div class="card">
+    <h2>Detailed Case-by-Case Analysis</h2>
+
+    <div class="case-detail nonserious-case">
+      <div class="case-header">
+        <div class="case-num">01</div>
+        <div class="case-drug">Amoxicillin → Skin Rash & Itching</div>
+        <span class="badge non-serious">NON-SERIOUS</span>
+        <span class="badge expected">EXPECTED</span>
+      </div>
+      <div class="case-body">
+        <strong>Justification:</strong> Amoxicillin-induced maculopapular rash is the most common ADR of penicillin-class antibiotics, occurring in 5–10% of patients. It does not meet seriousness criteria — no hospitalisation, no life-threat, no disability. It is well-documented in the drug label (expected). Management: discontinue drug, administer antihistamines.
+      </div>
+    </div>
+
+    <div class="case-detail serious-case">
+      <div class="case-header">
+        <div class="case-num">02</div>
+        <div class="case-drug">Ibuprofen → GI Bleeding requiring hospitalisation</div>
+        <span class="badge serious">SERIOUS</span>
+        <span class="badge expected">EXPECTED</span>
+      </div>
+      <div class="case-body">
+        <strong>Justification:</strong> GI bleeding is a well-known serious ADR of NSAIDs including Ibuprofen (listed in SmPC). It qualifies as SERIOUS because it required hospitalisation. It is EXPECTED as it is clearly documented in the prescribing information. Management: discontinue NSAID, PPI therapy, endoscopy evaluation.
+      </div>
+    </div>
+
+    <div class="case-detail serious-case">
+      <div class="case-header">
+        <div class="case-num">03</div>
+        <div class="case-drug">Metformin → Lactic Acidosis</div>
+        <span class="badge serious">SERIOUS</span>
+        <span class="badge unexpected">UNEXPECTED</span>
+      </div>
+      <div class="case-body">
+        <strong>Justification:</strong> Lactic acidosis is a rare but life-threatening ADR of Metformin (incidence ~0.03 cases/1000 patient-years). It is SERIOUS due to its life-threatening nature. Classified as UNEXPECTED because it is rare and occurs only in specific risk populations (renal impairment, hypoxia). Requires immediate ICU management, haemodialysis if severe.
+      </div>
+    </div>
+
+    <div class="case-detail nonserious-case">
+      <div class="case-header">
+        <div class="case-num">04</div>
+        <div class="case-drug">Atorvastatin → Elevated Liver Enzymes (mild)</div>
+        <span class="badge non-serious">NON-SERIOUS</span>
+        <span class="badge expected">EXPECTED</span>
+      </div>
+      <div class="case-body">
+        <strong>Justification:</strong> Mild transaminase elevation is a common, expected ADR of statins including Atorvastatin (listed in label). Since elevations are mild and asymptomatic, this does not meet seriousness criteria. EXPECTED as clearly documented. Management: monitor LFTs; dose adjustment or switch if persistent.
+      </div>
+    </div>
+
+    <div class="case-detail serious-case">
+      <div class="case-header">
+        <div class="case-num">05</div>
+        <div class="case-drug">Levofloxacin → Tendon Rupture</div>
+        <span class="badge serious">SERIOUS</span>
+        <span class="badge expected">EXPECTED</span>
+      </div>
+      <div class="case-body">
+        <strong>Justification:</strong> Fluoroquinolone-associated tendon rupture (especially Achilles tendon) is a serious, well-documented ADR carrying an FDA Black Box Warning. It is SERIOUS due to resulting disability. It is EXPECTED as it is labelled. More common in elderly patients and those on corticosteroids. Management: immediate drug discontinuation, orthopaedic evaluation.
+      </div>
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="conclusion">
+    <h3>✔ Classification Analysis Complete</h3>
+    <p>
+      Of 5 cases analysed: <strong>3 Serious</strong> (Cases 02, 03, 05) and <strong>2 Non-Serious</strong> (Cases 01, 04).<br/>
+      <strong>4 Expected</strong> (labelled ADRs) and <strong>1 Unexpected</strong> (Metformin → Lactic Acidosis).<br/>
+      Serious and unexpected ADRs require mandatory expedited pharmacovigilance reporting within 15 days.
+    </p>
+  </div>
+
+  <footer style="margin-top:24px;">
+    <p>Case Classification & Severity Analysis – Task 4 &nbsp;|&nbsp; VirtualWorks Pharmacovigilance Training</p>
+  </footer>
+</div>
+</body>
+</html>
